@@ -1,5 +1,7 @@
 FROM ubuntu:16.04
 
+ARG USER=ubuntu
+
 # Update repositories and update system
 RUN apt-get update -y && apt-get upgrade -y
 
