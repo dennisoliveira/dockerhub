@@ -36,13 +36,19 @@ RUN apt-get install -y php5.6 \
 	php5.6-xmlrpc \
 	php5.6-soap \
 	php5.6-uploadprogress \
-  libapache2-mod-php5.6
-
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer --version
+  libapache2-mod-php5.6 \
+  && sudo apt-get clean
 
 USER $USER
 WORKDIR /home/$USER
+
+RUN sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+  sudo php -r "if (hash_file('sha384', 'composer-setup.php') === 'c5b9b6d368201a9db6f74e2611495f369991b72d9c8cbd3ffbc63edff210eb73d46ffbfce88669ad33695ef77dc76976') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+RUN php composer-setup.php
+RUN php -r "unlink('composer-setup.php');"
+RUN sudo mv composer.phar /usr/local/bin/composer
+
+WORKDIR /var/www
 
 # ENTRYPOINT
 EXPOSE 80
