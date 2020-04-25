@@ -16,7 +16,7 @@ RUN apt-get install vim -y
 
 # Install Apache
 RUN apt-get install apache2 -y
-# RUN update-rc.d apache2 defaults
+RUN a2enmod rewrite
 
 # Install PHP 5.3
 RUN apt-get install -y php5 \
